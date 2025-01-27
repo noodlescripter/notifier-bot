@@ -1,0 +1,12 @@
+services:
+  framework-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: framework-bot
+    container_name: framework-bot
+    environment:
+      - URL=https://google.com
+      - SLACK_WEBHOOK_URL=https://SLACK_WEBHOOK_URL/
+    cap_add:
+      - SYS_ADMIN
