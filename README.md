@@ -66,17 +66,16 @@ services:
       - KEYWORD="Sold out,out of stock"
     cap_add:
       - SYS_ADMIN
-````
+```
 
 ## Build and run the Docker container using Docker Compose:
 
-    ```bash
-    sudo docker-compose build
-    ```
-
-    ```bash
-    sudo docker-compose up -d
-    ```
+```bash
+sudo docker-compose build
+```
+```bash
+sudo docker-compose up -d
+```
 
 ## OR Build your own using below commands
 
