@@ -8,5 +8,9 @@ services:
     environment:
       - URL=https://google.com
       - SLACK_WEBHOOK_URL=https://SLACK_WEBHOOK_URL/
+      - NOTIFICATION=always
+      - WORD="Notify me,sold out,out of stock"
     cap_add:
       - SYS_ADMIN
+
+      

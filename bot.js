@@ -1,23 +1,11 @@
-/**
- * @fileoverview This script checks the availability of a product on a specified website and sends notifications to a Slack channel.
- *
- * DISCLAIMER:
- * This script is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability,
- * fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other
- * liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings
- * in the software. The authors are not responsible for any occurrences with the targeted websites or any misuse of this script.
- *
- * COPYRIGHT:
- * © 2025 @noodlescripter (Hamim.A). All rights reserved.
- */
-
-const {keywords} = require('./keywords')
-const puppeteer = require("puppeteer");
-const { IncomingWebhook } = require("@slack/webhook");
 require("dotenv").config();
+
+const { IncomingWebhook } = require('@slack/webhook');
+const puppeteer = require('puppeteer');
 
 const url = process.env.URL;
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
+const notification = process.env.NOTIFICATION === 'always';
 
 const webhook = new IncomingWebhook(slackWebhookUrl);
 
@@ -30,10 +18,11 @@ async function checkAvailability() {
     return document.querySelector("body").innerText;
   });
 
-  const soldout = keywords.filter((item) => data.includes(item) === true).length > 0;
+  const KEYWORD = process.env.KEYWORD?.split(',') || ["Notify me"];
+  console.log("Keywords: ", KEYWORD);
+  const soldout = KEYWORD.filter((item) => data.includes(item.trim())).length > 0;
 
   if (soldout) {
-    console.log(data);
     console.log("===========================================================");
     console.log(
       "Time:" + new Date().getDate(),
@@ -41,11 +30,19 @@ async function checkAvailability() {
       new Date().getMinutes(), "NOT AVAILABLE"
     );
     console.log("===========================================================");
-    await webhook.send({
-      text: "Still not available",
-    });
+    if (notification) {
+      await webhook.send({
+        text: "Not available",
+      });
+    }
   } else {
-    console.log("Buy now");
+    console.log("===========================================================");
+    console.log(
+      "Time:" + new Date().getDate(),
+      new Date().getHours(),
+      new Date().getMinutes(), "AVAILABLE BUY NOW"
+    );
+    console.log("===========================================================");
     await webhook.send({
       text: "Buy now " + url,
     });

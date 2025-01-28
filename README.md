@@ -32,22 +32,16 @@ This script is provided "as is", without warranty of any kind, express or implie
    SLACK_WEBHOOK_URL=https://hooks.slack.com/services/yourapp/yourtoken
    ```
 
-3. Add the keywords in a [keywords.js](http://_vscodecontentref_/2) file:
+3. Add the keywords (Default value is ["Notify me"]) in a [.env](http://_vscodecontentref_/0) file:
 
-```javascript
-//keywords.js
-export const keywords = [
-  "Notify me",
-  "Sold out",
-  "Out of stock",
-  "Coming soon",
-];
-```
+   ```env
+   KEYWORD=Notify me,sold out,out of stock
+   ```
 
-4. Run the app locally:
+4. Notification [Default is only when product is available] [.env](http://_vscodecontentref_/0) file:
 
-   ```bash
-   npm i && node bot.js
+   ```env
+   NOTIFICATION=always
    ```
 
 ## Docker Compose Configuration
@@ -66,12 +60,19 @@ services:
     container_name: framework-bot
     environment:
       - URL=http://google.com/
-      - SLACK_WEBHOOK_URL=https://hooks.slack.com/services/yourapp/yourapptoken
+      - SLACK_WEBHOOK_URL=https://hooks.slack.com/services/yourapp/
+      yourapptoken
+      - NOTIFICATION=awalys
+      - KEYWORD="Sold out,out of stock"
     cap_add:
       - SYS_ADMIN
-```
+````
 
 ## Build and run the Docker container using Docker Compose:
+
+    ```bash
+    sudo docker-compose build
+    ```
 
     ```bash
     sudo docker-compose up -d
@@ -79,10 +80,15 @@ services:
 
 ## OR Build your own using below commands
 
-  ```bash
-  sudo docker build . -t image_name
-  ```
+```bash
+sudo docker build . -t image_name
+```
 
-  ```bash
-  sudo docker run --rm -dit -e URL=https://www.google.com/ SLACK_WEBHOOKURL=https://slackwebbookurl 
-  ``` 
+```bash
+sudo docker run --rm -it --cap-add=SYS_ADMIN \
+  -e URL=https://google.com \
+  -e SLACK_WEBHOOK_URL=https://slackhookurl \
+  -e NOTIFICATION=always \
+  -e KEYWORD="Notify me,Sold out,Out of stock" \
+  image_name
+```
