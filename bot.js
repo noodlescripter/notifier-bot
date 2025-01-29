@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 const { IncomingWebhook } = require("@slack/webhook");
 const puppeteer = require("puppeteer");
 
@@ -7,6 +7,10 @@ const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 const notification = process.env.NOTIFICATION === "always";
 
 const webhook = new IncomingWebhook(slackWebhookUrl);
+
+webhook.send({
+  text: "Server started, checking availability every 20 seconds",
+});
 
 async function checkAvailability() {
   try {
