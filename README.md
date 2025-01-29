@@ -65,7 +65,7 @@ services:
       - NOTIFICATION=awalys
       - KEYWORD="Sold out,out of stock"
     cap_add:
-      - SYS_ADMIN
+      - SYS_ADMIN`
 ```
 
 ## Build and run the Docker container using Docker Compose:
